@@ -1,14 +1,19 @@
 import http from "./httpService";
 
-const apiEndpoint = 'http://go-dev.greedygame.com/v3/dummy/';
+const apiEndpoint = "http://go-dev.greedygame.com/v3/dummy/";
 
-//test this function 
-export function getApp() {
-    return http.get(apiEndpoint+'apps')
+//may need to change the st in which data is stored
+export async function getAppNames() {
+    const { data } = await http.get(apiEndpoint + "apps");
+    return data.data
 }
 
-//test this function
-export function getReport(startDate, endDate) {
-    return http.get(apiEndpoint+`report?startDate=${startDate}&endDate=${endDate}`)
-}
+export async function getReport(start, end) {
+  const startDate = start.toISOString().split("T")[0];
+  const endDate = end.toISOString().split("T")[0];
 
+  const { data } = await http.get(
+    apiEndpoint + `report?startDate=${startDate}&endDate=${endDate}`
+  );
+  return data.data
+}
