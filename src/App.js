@@ -5,11 +5,11 @@ import Analytics from "./components/pages/analytics";
 
 function App() {
   return (
-    <>
+    <div className="m-7">
       <ToastContainer />
       <Header />
       <Analytics/>
-    </>
+    </div>
   );
 }
 
