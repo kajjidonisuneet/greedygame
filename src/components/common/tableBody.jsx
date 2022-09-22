@@ -10,7 +10,11 @@ class TableBody extends Component {
         {data.map((item, index) => (
           <tr key={index}>
             {columns.map((column, index) => (
-              <td key={index}> {item[column.path]}</td>
+              <td key={index}>
+                {column.cellContent
+                  ? column.cellContent(item)
+                  : item[column.path]}
+              </td>
             ))}
           </tr>
         ))}
