@@ -19,6 +19,3 @@ const SettingCheckBox = ({ value, onChange, checked, label }) => {
 
 export default SettingCheckBox;
 
-{
-  /* <span className="block m-2 bg-white text-gray-00 py-2 px-4 border border-gray-300 rounded  overflow-hidden w-1/6"></span> */
-}
