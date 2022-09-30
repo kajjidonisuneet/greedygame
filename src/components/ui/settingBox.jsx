@@ -39,8 +39,8 @@ class SettingBox extends Component {
   render() {
     return (
       <div className="p-6  bg-white rounded-lg border border-gray-200 shadow-md m-5">
-        <div >
-          {/* <Draggable > */}
+        <div className="flex mb-5 flex-wrap">
+          <Draggable >
             {this.state.columns.map((item, index) => {
               return (
                 <SettingCheckBox
@@ -52,7 +52,7 @@ class SettingBox extends Component {
                 />
               );
             })}
-          {/* </Draggable> */}
+          </Draggable>
         </div>
 
         <div className="flex justify-end">

@@ -8,10 +8,10 @@ const SettingCheckBox = ({ value, onChange, checked, label }) => {
           type="checkbox"
           value={value}
           onChange={onChange}
-          checked={checked}
+          defaultChecked={checked}
           className="hidden absolute"
         />
-        <span className="inline-block m-2 bg-white text-gray-00 py-2 px-4 w-1/6 border border-gray-300 rounded hover:cursor-pointer">{label}</span>
+        <span className="inline-block m-2 bg-white text-gray-00 py-2 px-4 w-44 border border-gray-300 rounded hover:cursor-pointer">{label}</span>
       </label>
     </div>
   );
