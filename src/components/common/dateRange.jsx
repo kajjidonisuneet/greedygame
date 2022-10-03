@@ -2,28 +2,53 @@ import React, { Component } from "react";
 import DatePicker from "react-datepicker";
 import { BsCalendar2WeekFill } from "react-icons/bs";
 import "react-datepicker/dist/react-datepicker.css";
+import Popup from "reactjs-popup";
+import { format } from "date-fns";
 
 class DateRange extends Component {
+  state = { startDate: new Date(), endDate: new Date(), isOpen: false };
 
-
-  state = { startDate: null, endDate: null };
-
-
-
-  handelDateChange = (update) => {
-    const [startDate, endDate] = update
-    this.setState({startDate, endDate})
-    if (startDate!== null & endDate!==null){
-        this.props.onDateChange(startDate, endDate)
-    }
+  componentDidMount() {
+    this.props.onDateChange(this.state.startDate, this.state.endDate);
   }
 
+  handelDateChange = (update) => {
+    const [startDate, endDate] = update;
+    this.setState({ startDate, endDate });
+    if ((startDate !== null) & (endDate !== null)) {
+      this.props.onDateChange(startDate, endDate);
+    }
+  };
+
+  getFormatDate(){
+    if (this.state.endDate === null) {
+      return format(this.state.startDate, 'MMM dd' )
+    }
+    else {
+      if (this.state.endDate.getFullYear() === this.state.endDate.getFullYear()){
+        return `${format(this.state.startDate, 'MMM dd' )} - ${format(this.state.endDate, 'MMM dd, yyyy' )}`
+      } else {
+        return `${format(this.state.startDate, 'MMM dd, yyyy' )} - ${format(this.state.endDate, 'MMM dd, yyyy' )}`
+      }
+    }
+
+  }
 
   render() {
     return (
-      <div className="flex">
-        <BsCalendar2WeekFill className="m-2" />
-        <div className="border-solid border-4 border-indigo-600">
+      <div>
+        <Popup
+          trigger={
+            <button className=" bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">
+              <div className="flex items-center">
+                <BsCalendar2WeekFill className="mr-2" />
+                <p>
+                  {this.getFormatDate()}
+                </p>
+              </div>
+            </button>
+          }
+        >
           <DatePicker
             selectsRange={true}
             startDate={this.state.startDate}
@@ -31,9 +56,9 @@ class DateRange extends Component {
             onChange={(update) => {
               this.handelDateChange(update);
             }}
-            withPortal
+            inline
           />
-        </div>
+        </Popup>
       </div>
     );
   }

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import TableHeadCell from "./tableHeadCell";
 
 class TableHeader extends Component {
   render() {
@@ -6,8 +7,9 @@ class TableHeader extends Component {
       <thead>
         <tr>
           {this.props.columns.map((column) => {
+            // console.log(column)
             if (column.displayCellContent){
-            return(<th key={column.path}>{column.label}</th>);
+            return(<TableHeadCell key={column.path}>{column.headerComponents?column.headerComponents(column):<p>no function</p>}</TableHeadCell>);
             }
           })}
         </tr>

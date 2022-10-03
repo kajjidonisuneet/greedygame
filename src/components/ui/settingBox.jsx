@@ -12,11 +12,6 @@ class SettingBox extends Component {
     this.state.columns = props.columns;
   }
 
-  // componentDidMount() {
-  //   const columns = this.props.columns;
-  //   this.setState({ columns });
-  // }
-
   handelChange(event) {
     const { columns } = this.state;
     if (!(event.target.value === "date" || event.target.value === "app_name")) {
@@ -33,14 +28,21 @@ class SettingBox extends Component {
   }
 
   getChangedPos = (currentPos, newPos) => {
-    console.log(currentPos, newPos);
+    const { columns } = this.state;
+    if (currentPos !== newPos) {
+      const element = columns[currentPos];
+      columns.splice(currentPos, 1);
+      columns.splice(newPos, 0, element);
+    }
+    this.setState({ columns });
   };
 
   render() {
     return (
       <div className="p-6  bg-white rounded-lg border border-gray-200 shadow-md m-5">
+        <p className="m-2 text-xl font-medium">Dimensions and Metrics</p>
         <div className="flex mb-5 flex-wrap">
-          <Draggable >
+          <Draggable onPosChange={this.getChangedPos}>
             {this.state.columns.map((item, index) => {
               return (
                 <SettingCheckBox
@@ -60,6 +62,7 @@ class SettingBox extends Component {
           <ApplyButton
             onClick={this.updateColumns.bind(this)}
             className={"m-2"}
+            label={'Apply Changes'}
           />
         </div>
       </div>
