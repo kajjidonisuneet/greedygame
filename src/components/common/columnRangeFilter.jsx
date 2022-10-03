@@ -69,12 +69,22 @@ class ColumnRangeFilter extends Component {
                 max={this.state.max}
                 onInput={this.handelInput.bind(this)}
                 value={[this.state.selectedMin, this.state.selectedMax]}
-                step={this.props.column.step?this.props.column.step:1}
+                step={this.props.column.step ? this.props.column.step : 1}
               />
 
               <div className="flex justify-between">
-                <p>{this.state.selectedMin.toLocaleString()}</p>
-                <p>{this.state.selectedMax.toLocaleString()}</p>
+                <p>
+                  {this.state.selectedMin.toLocaleString(undefined, {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 2,
+                  })}
+                </p>
+                <p>
+                  {this.state.selectedMax.toLocaleString(undefined, {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 2,
+                  })}
+                </p>
               </div>
             </div>
             <div className="flex justify-between">

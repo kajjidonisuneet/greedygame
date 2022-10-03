@@ -24,7 +24,15 @@ class ColumnTextFilter extends Component {
   };
 
   handleChange(e) {
+
     this.setState({ searchText: e.target.value });
+    
+  }
+
+  handelKeyPress(e){
+    if(e.key === 'Enter'){
+      this.handelFilter()
+    }
   }
 
   render() {
@@ -45,6 +53,7 @@ class ColumnTextFilter extends Component {
                 value={this.state.searchText}
                 onChange={this.handleChange.bind(this)}
                 className=" border border-gray-300 text-gray-900  rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                onKeyPress={this.handelKeyPress.bind(this)}
               />
             </div>
             <div className="flex justify-between">

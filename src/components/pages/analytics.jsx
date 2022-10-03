@@ -164,7 +164,10 @@ class Analytics extends Component {
           </>
         ),
         cellContent: (item) => {
-          return `$${item.revenue.toFixed(2)}`;
+          return `$${item.revenue.toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })}`;
         },
       },
       {
@@ -173,7 +176,7 @@ class Analytics extends Component {
         dataType: "number",
         min: 0,
         max: 1,
-        step: 0.001,
+        step: 0.01,
         displayCellContent: true,
         headerComponents: (column) => (
           <>
@@ -195,7 +198,7 @@ class Analytics extends Component {
         dataType: "number",
         min: 0,
         max: 1,
-        step: 0.001,
+        step: 0.01,
         displayCellContent: true,
         headerComponents: (column) => (
           <>
@@ -288,14 +291,23 @@ class Analytics extends Component {
 
     for (let path in filters) {
       if (path === "date") {
+        filteredReport = filteredReport.filter((e) => {
+          const date = new Date(e.date);
+          date.setHours(0);
+          date.setMinutes(0);
+          return filters.date.startDate <= date && filters.date.endDate >= date;
+        });
         console.log("date filter");
       } else if (path === "app_name") {
-        console.log("app_name filter");
+        filteredReport = filteredReport.filter((e) =>
+          e.app_name
+            .toLowerCase()
+            .includes(filters.app_name.searchText.toLowerCase())
+        );
       } else {
         filteredReport = filteredReport.filter(
           (e) => e[path] >= filters[path].min && e[path] <= filters[path].max
         );
-        console.log(filteredReport, 'other filters')
       }
     }
 
@@ -323,7 +335,7 @@ class Analytics extends Component {
         </div>
         <br />
         <AnalyticsTable
-          data={this.state.reports}
+          data={filteredReport}
           columns={this.state.columns}
         />
       </>
