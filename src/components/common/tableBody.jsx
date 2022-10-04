@@ -13,9 +13,11 @@ class TableBody extends Component {
               if (column.displayCellContent) {
                 return (
                   <td key={index}>
-                    {column.cellContent
-                      ? column.cellContent(item)
-                      : item[column.path]}
+                    <p className="m-2">
+                      {column.cellContent
+                        ? column.cellContent(item)
+                        : item[column.path]}
+                    </p>
                   </td>
                 );
               }

@@ -9,6 +9,9 @@ import ColumnRangeFilter from "../common/columnRangeFilter";
 import TableHeaderLabel from "../common/tableHeaderLabel";
 import ColumnTextFilter from "../common/columnTextFilter";
 import ColumnDateFilter from "../common/columnDateFilter";
+import _ from "lodash";
+import NoDataToDisplay from "../common/noDataToDisplay";
+import TableHeaderTotal from "../common/tableHeaderTotal";
 
 class Analytics extends Component {
   state = {
@@ -18,13 +21,15 @@ class Analytics extends Component {
     appName: {},
     displaySettings: false,
     filters: {},
-    filteredReports: [], // remove this for final version
+    filteredReports: [],
+    sortColumn: { path: "requests", order: "asc" },
     columns: [
       {
         path: "date",
         label: "Date",
         dataType: "date",
         displayCellContent: true,
+        total: 0,
         headerComponents: (column) => (
           <>
             <ColumnDateFilter
@@ -32,7 +37,12 @@ class Analytics extends Component {
               updateFilterParameter={this.updateFilterParameter.bind(this)}
               resetFilterParameter={this.resetFilterParameter.bind(this)}
             />
-            <TableHeaderLabel column={column} />
+            <TableHeaderLabel
+              column={column}
+              sortColumn={this.state.sortColumn}
+              onSort={this.handelSort.bind(this)}
+            />
+            <TableHeaderTotal column={column} format={"0.[0] a"} />
           </>
         ),
         cellContent: (item) => {
@@ -49,6 +59,7 @@ class Analytics extends Component {
         label: "App",
         dataType: "text",
         displayCellContent: true,
+        total: 0,
         headerComponents: (column) => (
           <>
             <ColumnTextFilter
@@ -56,7 +67,12 @@ class Analytics extends Component {
               updateFilterParameter={this.updateFilterParameter.bind(this)}
               resetFilterParameter={this.resetFilterParameter.bind(this)}
             />
-            <TableHeaderLabel column={column} />
+            <TableHeaderLabel
+              column={column}
+              sortColumn={this.state.sortColumn}
+              onSort={this.handelSort.bind(this)}
+            />
+            <TableHeaderTotal column={column} format={"0.[0] a"} />
           </>
         ),
 
@@ -75,6 +91,7 @@ class Analytics extends Component {
         min: 0,
         max: 1,
         displayCellContent: true,
+        total: 0,
         headerComponents: (column) => (
           <>
             <ColumnRangeFilter
@@ -82,7 +99,12 @@ class Analytics extends Component {
               updateFilterParameter={this.updateFilterParameter.bind(this)}
               resetFilterParameter={this.resetFilterParameter.bind(this)}
             />
-            <TableHeaderLabel column={column} />
+            <TableHeaderLabel
+              column={column}
+              sortColumn={this.state.sortColumn}
+              onSort={this.handelSort.bind(this)}
+            />
+            <TableHeaderTotal column={column} format={"0.[0] a"} />
           </>
         ),
         cellContent: (item) => {
@@ -96,6 +118,7 @@ class Analytics extends Component {
         min: 0,
         max: 1,
         displayCellContent: true,
+        total: 0,
         headerComponents: (column) => (
           <>
             <ColumnRangeFilter
@@ -103,7 +126,12 @@ class Analytics extends Component {
               updateFilterParameter={this.updateFilterParameter.bind(this)}
               resetFilterParameter={this.resetFilterParameter.bind(this)}
             />
-            <TableHeaderLabel column={column} />
+            <TableHeaderLabel
+              column={column}
+              sortColumn={this.state.sortColumn}
+              onSort={this.handelSort.bind(this)}
+            />
+            <TableHeaderTotal column={column} format={"0.[0] a"} />
           </>
         ),
         cellContent: (item) => {
@@ -117,6 +145,7 @@ class Analytics extends Component {
         min: 0,
         max: 1,
         displayCellContent: true,
+        total: 0,
         headerComponents: (column) => (
           <>
             <ColumnRangeFilter
@@ -124,7 +153,12 @@ class Analytics extends Component {
               updateFilterParameter={this.updateFilterParameter.bind(this)}
               resetFilterParameter={this.resetFilterParameter.bind(this)}
             />
-            <TableHeaderLabel column={column} />
+            <TableHeaderLabel
+              column={column}
+              sortColumn={this.state.sortColumn}
+              onSort={this.handelSort.bind(this)}
+            />
+            <TableHeaderTotal column={column} format={"0.[0] a"} />
           </>
         ),
       },
@@ -135,6 +169,7 @@ class Analytics extends Component {
         min: 0,
         max: 1,
         displayCellContent: true,
+        total: 0,
         headerComponents: (column) => (
           <>
             <ColumnRangeFilter
@@ -142,7 +177,12 @@ class Analytics extends Component {
               updateFilterParameter={this.updateFilterParameter.bind(this)}
               resetFilterParameter={this.resetFilterParameter.bind(this)}
             />
-            <TableHeaderLabel column={column} />
+            <TableHeaderLabel
+              column={column}
+              sortColumn={this.state.sortColumn}
+              onSort={this.handelSort.bind(this)}
+            />
+            <TableHeaderTotal column={column} format={"0.[0] a"} />
           </>
         ),
       },
@@ -153,6 +193,7 @@ class Analytics extends Component {
         min: 0,
         max: 1,
         displayCellContent: true,
+        total: 0,
         headerComponents: (column) => (
           <>
             <ColumnRangeFilter
@@ -160,7 +201,12 @@ class Analytics extends Component {
               updateFilterParameter={this.updateFilterParameter.bind(this)}
               resetFilterParameter={this.resetFilterParameter.bind(this)}
             />
-            <TableHeaderLabel column={column} />
+            <TableHeaderLabel
+              column={column}
+              sortColumn={this.state.sortColumn}
+              onSort={this.handelSort.bind(this)}
+            />
+            <TableHeaderTotal column={column} format={"($0,0)"} />
           </>
         ),
         cellContent: (item) => {
@@ -178,6 +224,7 @@ class Analytics extends Component {
         max: 1,
         step: 0.01,
         displayCellContent: true,
+        total: 0,
         headerComponents: (column) => (
           <>
             <ColumnRangeFilter
@@ -185,7 +232,12 @@ class Analytics extends Component {
               updateFilterParameter={this.updateFilterParameter.bind(this)}
               resetFilterParameter={this.resetFilterParameter.bind(this)}
             />
-            <TableHeaderLabel column={column} />
+            <TableHeaderLabel
+              column={column}
+              sortColumn={this.state.sortColumn}
+              onSort={this.handelSort.bind(this)}
+            />
+            <TableHeaderTotal column={column} format={"0.[00]%"} />
           </>
         ),
         cellContent: (item) => {
@@ -200,6 +252,7 @@ class Analytics extends Component {
         max: 1,
         step: 0.01,
         displayCellContent: true,
+        total: 0,
         headerComponents: (column) => (
           <>
             <ColumnRangeFilter
@@ -207,7 +260,12 @@ class Analytics extends Component {
               updateFilterParameter={this.updateFilterParameter.bind(this)}
               resetFilterParameter={this.resetFilterParameter.bind(this)}
             />
-            <TableHeaderLabel column={column} />
+            <TableHeaderLabel
+              column={column}
+              sortColumn={this.state.sortColumn}
+              onSort={this.handelSort.bind(this)}
+            />
+            <TableHeaderTotal column={column} format={"0.[00]%"} />
           </>
         ),
         cellContent: (item) => {
@@ -220,18 +278,22 @@ class Analytics extends Component {
   updateFilterParameter(object) {
     // console.log(object);
     const filters = { ...this.state.filters, ...object };
-    this.setState({ filters });
+    this.setState({ filters }, this.getFilteredReport);
   }
 
   resetFilterParameter(object) {
     // console.log(object);
     const filters = this.state.filters;
     delete filters[object];
-    this.setState({ filters });
+    this.setState({ filters }, this.getFilteredReport);
+  }
+
+  handelSort(sortColumn) {
+    this.setState({ sortColumn });
   }
 
   calculateFillRate(item) {
-    return (item.requests / item.responses) * 100;
+    return (item.responses / item.requests) * 100;
   }
 
   calculateCTR(item) {
@@ -246,7 +308,10 @@ class Analytics extends Component {
       item.CTR = this.calculateCTR(item);
       reports.push(item);
     });
-    this.setState({ reports }, this.updateColumnsMaxMin);
+    this.setState(
+      { reports, filteredReports: reports },
+      this.updateColumnsMaxMin
+    );
   }
 
   updateDateChange = async (startDate, endDate) => {
@@ -270,7 +335,7 @@ class Analytics extends Component {
   }
 
   getMaxMin(column) {
-    const reports = this.state.reports;
+    const reports = this.state.filteredReports;
     if (column.dataType === "number") {
       column.max = Math.max(...reports.map((o) => o[column.path]));
       column.min = Math.min(...reports.map((o) => o[column.path]));
@@ -279,19 +344,47 @@ class Analytics extends Component {
     return column;
   }
 
+  getTotal(column) {
+    const reports = this.state.filteredReports;
+    if (column.path === "date") {
+      const uniqueDateSet = new Set();
+      reports.forEach((e) => {
+        uniqueDateSet.add(e.date);
+      });
+      column.total = uniqueDateSet.size;
+    } else if (column.path === "app_name") {
+      column.total = reports.length;
+    } else if (column.path === "fill_rate" || column.path === "CTR") {
+      const length = reports.length;
+      const avg = reports.reduce((acc, currentElement) => {
+        return acc + currentElement[column.path] / length;
+      }, 0);
+      column.total = avg/100;
+    } else {
+      const sum = reports.reduce((acc, currentElement) => {
+        return acc + currentElement[column.path];
+      }, 0);
+      column.total = sum;
+    }
+
+    return column;
+  }
+
   updateColumnsMaxMin() {
     const columns = this.state.columns;
     const updatedColumns = columns.map(this.getMaxMin.bind(this));
+    const updatedColumns2 = updatedColumns.map(this.getTotal.bind(this));
+    console.log(updatedColumns2);
     this.setState({ columns: updatedColumns });
   }
 
   getFilteredReport() {
     const { filters } = this.state;
-    let filteredReport = this.state.reports;
+    let filteredReports = this.state.reports;
 
     for (let path in filters) {
       if (path === "date") {
-        filteredReport = filteredReport.filter((e) => {
+        filteredReports = filteredReports.filter((e) => {
           const date = new Date(e.date);
           date.setHours(0);
           date.setMinutes(0);
@@ -299,23 +392,27 @@ class Analytics extends Component {
         });
         console.log("date filter");
       } else if (path === "app_name") {
-        filteredReport = filteredReport.filter((e) =>
+        filteredReports = filteredReports.filter((e) =>
           e.app_name
             .toLowerCase()
             .includes(filters.app_name.searchText.toLowerCase())
         );
       } else {
-        filteredReport = filteredReport.filter(
+        filteredReports = filteredReports.filter(
           (e) => e[path] >= filters[path].min && e[path] <= filters[path].max
         );
       }
     }
 
-    return filteredReport;
+    this.setState({ filteredReports }, this.updateColumnsMaxMin);
   }
 
   render() {
-    const filteredReport = this.getFilteredReport();
+    const sortedReport = _.orderBy(
+      this.state.filteredReports,
+      [this.state.sortColumn.path],
+      [this.state.sortColumn.order]
+    );
     return (
       <>
         <div className="flex">
@@ -334,10 +431,8 @@ class Analytics extends Component {
           )}
         </div>
         <br />
-        <AnalyticsTable
-          data={filteredReport}
-          columns={this.state.columns}
-        />
+        <AnalyticsTable data={sortedReport} columns={this.state.columns} />
+        {sortedReport.length === 0 && <NoDataToDisplay />}
       </>
     );
   }
