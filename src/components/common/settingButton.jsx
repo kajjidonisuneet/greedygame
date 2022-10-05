@@ -11,7 +11,7 @@ class SettingButton extends Component {
           this.props.onClick();
         }}        
       >
-        <GiSettingsKnobs className="inline mr-2"/>
+        <GiSettingsKnobs className="inline mr-2" size={20} color={'blue'}/>
         Setting
       </button>
     );

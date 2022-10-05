@@ -12,12 +12,12 @@ class TableBody extends Component {
             {columns.map((column, index) => {
               if (column.displayCellContent) {
                 return (
-                  <td key={index}>
-                    <p className="m-2">
+                  <td key={index} className=" border-b border-gray-300 text-right">
+                    <div className="my-2 mx-10">
                       {column.cellContent
                         ? column.cellContent(item)
                         : item[column.path]}
-                    </p>
+                    </div>
                   </td>
                 );
               }

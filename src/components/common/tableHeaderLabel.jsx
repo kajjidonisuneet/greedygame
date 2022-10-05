@@ -17,18 +17,20 @@ class TableHeaderLabel extends Component {
     const { sortColumn } = this.props;
 
     if (column.path !== sortColumn.path) return null;
-    if (sortColumn.order === "asc") return <FaSortUp />;
-    return <FaSortDown />;
+    if (sortColumn.order === "asc") return <FaSortUp color={"gray"} />;
+    return <FaSortDown color={"gray"} />;
   }
 
   render() {
     return (
       <div
-        className="flex items-center hover:cursor-pointer"
+        className="flex justify-center items-center hover:cursor-pointer"
         onClick={() => this.raiseSort(this.props.column.path)}
       >
         {this.renderSortIcon(this.props.column)}
-        <p className="text-xl m-2">{this.props.column.label}</p>
+        <p className="text-lg mx-2 font-medium text-gray-700">
+          {this.props.column.label}
+        </p>
       </div>
     );
   }

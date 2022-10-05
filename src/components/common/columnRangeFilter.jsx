@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { FiFilter } from "react-icons/fi";
+import { FaFilter } from "react-icons/fa";
 import Popup from "reactjs-popup";
 import ApplyButton from "./applyButton";
 import ResetButton from "./resetButton";
@@ -56,7 +56,7 @@ class ColumnRangeFilter extends Component {
         <Popup
           trigger={
             <button>
-              <FiFilter />
+              <FaFilter size={15} color={"gray"} className='mx-2'/>
             </button>
           }
           position="bottom left"

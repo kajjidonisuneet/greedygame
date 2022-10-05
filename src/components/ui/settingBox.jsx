@@ -41,7 +41,7 @@ class SettingBox extends Component {
     return (
       <div className="p-6  bg-white rounded-lg border border-gray-200 shadow-md m-5">
         <p className="m-2 text-xl font-medium">Dimensions and Metrics</p>
-        <div className="flex mb-5 flex-wrap">
+        <div className="flex mb-5 flex-wrap ">
           <Draggable onPosChange={this.getChangedPos}>
             {this.state.columns.map((item, index) => {
               return (

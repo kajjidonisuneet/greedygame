@@ -41,7 +41,7 @@ class DateRange extends Component {
           trigger={
             <button className=" bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">
               <div className="flex items-center">
-                <BsCalendar2WeekFill className="mr-2" />
+                <BsCalendar2WeekFill className="mr-2" size={20} color={'blue'}/>
                 <p>
                   {this.getFormatDate()}
                 </p>

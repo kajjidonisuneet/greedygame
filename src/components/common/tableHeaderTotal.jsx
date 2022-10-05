@@ -1,10 +1,14 @@
-import React from 'react';
-import numeral from 'numeral'
+import React from "react";
+import numeral from "numeral";
 
+const TableHeaderTotal = ({ column, format }) => {
+  return (
+    <p className=" text-3xl font-normal mt-3">
+      {numeral(column.total).format(format)}
+    </p>
+  );
+};
 
-const TableHeaderTotal = ({column, format}) => {
-    console.log(column)
-    return ( <p>{numeral(column.total).format(format)}</p> );
+export default TableHeaderTotal;
+{
 }
- 
-export default TableHeaderTotal;{}

@@ -7,9 +7,8 @@ class TableHeader extends Component {
       <thead>
         <tr>
           {this.props.columns.map((column) => {
-            // console.log(column)
             if (column.displayCellContent){
-            return(<TableHeadCell key={column.path}>{column.headerComponents?column.headerComponents(column):<p>no function</p>}</TableHeadCell>);
+            return(<TableHeadCell key={column.path}>{column.headerComponents?column.headerComponents(column):<p>nill</p>}</TableHeadCell>);
             }
           })}
         </tr>

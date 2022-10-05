@@ -22,7 +22,8 @@ class Analytics extends Component {
     displaySettings: false,
     filters: {},
     filteredReports: [],
-    sortColumn: { path: "requests", order: "asc" },
+    urlParm: new URLSearchParams(),
+    sortColumn: { path: "date", order: "asc" },
     columns: [
       {
         path: "date",
@@ -78,8 +79,9 @@ class Analytics extends Component {
 
         cellContent: (item) => {
           return (
-            <div className="flex">
-              <FaAppStore /> {item.app_name}
+            <div className="flex ">
+              <FaAppStore />
+              <p className="ml-2">{item.app_name}</p>
             </div>
           );
         },
@@ -276,13 +278,11 @@ class Analytics extends Component {
   };
 
   updateFilterParameter(object) {
-    // console.log(object);
     const filters = { ...this.state.filters, ...object };
     this.setState({ filters }, this.getFilteredReport);
   }
 
   resetFilterParameter(object) {
-    // console.log(object);
     const filters = this.state.filters;
     delete filters[object];
     this.setState({ filters }, this.getFilteredReport);
@@ -315,12 +315,36 @@ class Analytics extends Component {
   }
 
   updateDateChange = async (startDate, endDate) => {
-    this.setState({ startDate, endDate }); // if dates are not required for any other things then remove it from storing it in state
+    // this.updateUrlDateParam(startDate, endDate);
+    this.setState({ startDate, endDate });
     const reports = await getReport(startDate, endDate);
     this.updateReports(reports);
   };
 
+  updateFiltersFromURLparam() {
+    const filters = {};
+    const filterParam = new URLSearchParams(this.props.location.search);
+    console.log("filter param from url", filterParam);
+  }
+
+  updateUrlDateParam(startDate, endDate) {
+    const urlParm = this.state.urlParm;
+    urlParm.append("startDate", startDate.toISOString());
+    urlParm.append("endDate", endDate.toISOString());
+    console.log(urlParm.toString(), startDate.toISOString());
+
+    // console.log(startDate.toISOString(), endDate.toISOString());
+  }
+
   async componentDidMount() {
+    // this.updateFiltersFromURLparam();
+    // this.props.history.push({
+    //   pathname: "/analytics",
+    //   search: "?color=blue",
+    // });
+
+    // here read URL params  and update filters
+
     const appName = await getAppNames();
     this.setState({ appName });
   }
@@ -359,7 +383,7 @@ class Analytics extends Component {
       const avg = reports.reduce((acc, currentElement) => {
         return acc + currentElement[column.path] / length;
       }, 0);
-      column.total = avg/100;
+      column.total = avg / 100;
     } else {
       const sum = reports.reduce((acc, currentElement) => {
         return acc + currentElement[column.path];
@@ -374,8 +398,7 @@ class Analytics extends Component {
     const columns = this.state.columns;
     const updatedColumns = columns.map(this.getMaxMin.bind(this));
     const updatedColumns2 = updatedColumns.map(this.getTotal.bind(this));
-    console.log(updatedColumns2);
-    this.setState({ columns: updatedColumns });
+    this.setState({ columns: updatedColumns2 });
   }
 
   getFilteredReport() {
@@ -415,7 +438,7 @@ class Analytics extends Component {
     );
     return (
       <>
-        <div className="flex">
+        <div className="flex mx-5">
           <DateRange onDateChange={this.updateDateChange} />
           <div className="ml-auto">
             <SettingButton onClick={this.toggleDisplaySetting.bind(this)} />
@@ -431,7 +454,9 @@ class Analytics extends Component {
           )}
         </div>
         <br />
-        <AnalyticsTable data={sortedReport} columns={this.state.columns} />
+        <div className="m-5">
+          <AnalyticsTable data={sortedReport} columns={this.state.columns} />
+        </div>
         {sortedReport.length === 0 && <NoDataToDisplay />}
       </>
     );

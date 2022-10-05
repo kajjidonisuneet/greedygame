@@ -20,3 +20,7 @@ code {
 input:checked + span{
   border-left: 5px blue solid;
 }
+
+.grabbable{
+
+flex: 0 0 !important;}

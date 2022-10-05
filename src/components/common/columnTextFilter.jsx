@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { FiFilter } from "react-icons/fi";
+import { FaFilter } from "react-icons/fa";
 import Popup from "reactjs-popup";
 import ApplyButton from "./applyButton";
 import ResetButton from "./resetButton";
@@ -24,14 +24,12 @@ class ColumnTextFilter extends Component {
   };
 
   handleChange(e) {
-
     this.setState({ searchText: e.target.value });
-    
   }
 
-  handelKeyPress(e){
-    if(e.key === 'Enter'){
-      this.handelFilter()
+  handelKeyPress(e) {
+    if (e.key === "Enter") {
+      this.handelFilter();
     }
   }
 
@@ -41,7 +39,7 @@ class ColumnTextFilter extends Component {
         <Popup
           trigger={
             <button>
-              <FiFilter />
+              <FaFilter size={15} color={"gray"} className='mx-2'/>
             </button>
           }
           position="bottom left"
