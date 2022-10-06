@@ -10,5 +10,5 @@ const ApplyButton = ({ onClick, label }) => {
     </button>
   );
 };
-// add on click to submit
+
 export default ApplyButton;

@@ -4,7 +4,7 @@ import TableBody from "./tableBody";
 
 const Table = ({ columns, data }) => {
   return (
-    <table>
+    <table className="mx-auto">
       <TableHeader columns={columns} />
       <TableBody columns={columns} data={data} />
     </table>

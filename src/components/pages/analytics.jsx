@@ -15,14 +15,13 @@ import TableHeaderTotal from "../common/tableHeaderTotal";
 
 class Analytics extends Component {
   state = {
-    startDate: null,
-    endDate: null,
+    startDate: new Date(),
+    endDate: new Date(),
     reports: [],
     appName: {},
     displaySettings: false,
     filters: {},
     filteredReports: [],
-    urlParm: new URLSearchParams(),
     sortColumn: { path: "date", order: "asc" },
     columns: [
       {
@@ -293,11 +292,11 @@ class Analytics extends Component {
   }
 
   calculateFillRate(item) {
-    return (item.responses / item.requests) * 100;
+    return Number(((item.responses / item.requests) * 100).toFixed(3));
   }
 
   calculateCTR(item) {
-    return (item.clicks / item.impressions) * 100;
+    return Number(((item.clicks / item.impressions) * 100).toFixed(3));
   }
 
   updateReports(r) {
@@ -306,6 +305,7 @@ class Analytics extends Component {
       item.app_name = this.state.appName[item.app_id];
       item.fill_rate = this.calculateFillRate(item);
       item.CTR = this.calculateCTR(item);
+      item.revenue = Number(item.revenue.toFixed(3));
       reports.push(item);
     });
     this.setState(
@@ -315,38 +315,36 @@ class Analytics extends Component {
   }
 
   updateDateChange = async (startDate, endDate) => {
-    // this.updateUrlDateParam(startDate, endDate);
     this.setState({ startDate, endDate });
+    const appName = await getAppNames();
+    this.setState({ appName });
     const reports = await getReport(startDate, endDate);
     this.updateReports(reports);
+    this.updateFiltersFromURLparam();
   };
 
   updateFiltersFromURLparam() {
     const filters = {};
-    const filterParam = new URLSearchParams(this.props.location.search);
-    console.log("filter param from url", filterParam);
-  }
+    const urlParam = new URLSearchParams(this.props.location.search);
 
-  updateUrlDateParam(startDate, endDate) {
-    const urlParm = this.state.urlParm;
-    urlParm.append("startDate", startDate.toISOString());
-    urlParm.append("endDate", endDate.toISOString());
-    console.log(urlParm.toString(), startDate.toISOString());
+    for (const key of urlParam.keys()) {
+      if (key === "app_name") {
+        filters.app_name = { searchText: urlParam.get("app_name") };
+      } else if (key === "startDate" || key === "endDate") {
+        filters.date = {
+          startDate: new Date(urlParam.get("startDate")),
+          endDate: new Date(urlParam.get("endDate")),
+        };
+      } else {
+        const path = key.split("_")[0];
 
-    // console.log(startDate.toISOString(), endDate.toISOString());
-  }
-
-  async componentDidMount() {
-    // this.updateFiltersFromURLparam();
-    // this.props.history.push({
-    //   pathname: "/analytics",
-    //   search: "?color=blue",
-    // });
-
-    // here read URL params  and update filters
-
-    const appName = await getAppNames();
-    this.setState({ appName });
+        filters[path] = {
+          min: Number(urlParam.get(path + "_min")),
+          max: Number(urlParam.get(path + "_max")),
+        };
+      }
+      this.setState({ filters }, this.getFilteredReport);
+    }
   }
 
   toggleDisplaySetting() {
@@ -401,7 +399,35 @@ class Analytics extends Component {
     this.setState({ columns: updatedColumns2 });
   }
 
+  updateURLFromFilters() {
+    const { filters } = this.state;
+    const urlParm = new URLSearchParams();
+
+    for (let path in filters) {
+      if (path === "date") {
+        urlParm.delete("startDate");
+        urlParm.append("startDate", filters.date.startDate.toISOString());
+        urlParm.delete("endDate");
+        urlParm.append("endDate", filters.date.endDate.toISOString());
+      } else if (path === "app_name") {
+        urlParm.delete("app_name");
+        urlParm.append("app_name", filters.app_name.searchText);
+      } else {
+        urlParm.delete([path + "_min"]);
+        urlParm.append([path + "_min"], filters[path].min);
+        urlParm.delete([path + "_max"]);
+        urlParm.append([path + "_max"], filters[path].max);
+      }
+    }
+    this.props.history.push({
+      pathname: "/analytics",
+      search: "?" + urlParm.toString(),
+    });
+  }
+
   getFilteredReport() {
+    this.updateURLFromFilters();
+
     const { filters } = this.state;
     let filteredReports = this.state.reports;
 
@@ -413,7 +439,6 @@ class Analytics extends Component {
           date.setMinutes(0);
           return filters.date.startDate <= date && filters.date.endDate >= date;
         });
-        console.log("date filter");
       } else if (path === "app_name") {
         filteredReports = filteredReports.filter((e) =>
           e.app_name
@@ -456,8 +481,8 @@ class Analytics extends Component {
         <br />
         <div className="m-5">
           <AnalyticsTable data={sortedReport} columns={this.state.columns} />
+          {sortedReport.length === 0 && <NoDataToDisplay />}
         </div>
-        {sortedReport.length === 0 && <NoDataToDisplay />}
       </>
     );
   }

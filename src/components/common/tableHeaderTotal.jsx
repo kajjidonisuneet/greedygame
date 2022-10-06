@@ -3,7 +3,7 @@ import numeral from "numeral";
 
 const TableHeaderTotal = ({ column, format }) => {
   return (
-    <p className=" text-3xl font-normal mt-3">
+    <p className="text-3xl font-normal mt-3 mb-1">
       {numeral(column.total).format(format)}
     </p>
   );
